@@ -10,11 +10,12 @@
 
   <style>
     :root {
-      --bg1: #ffd6e7;
-      --bg2: #ffeef6;
-      --card: #ffffffcc;
-      --yes: #ff3b7a;
-      --yesHover: #ff1f68;
+      --bg1: #1a1a2e;
+      --bg2: #16213e;
+      --card: #0f1419ee;
+      --accent: #e94560;
+      --accentHover: #d63651;
+      --text: #eaeaea;
     }
 
     * { box-sizing: border-box; }
@@ -24,10 +25,11 @@
       min-height: 100svh;
       display: grid;
       place-items: center;
-      background: radial-gradient(circle at top, var(--bg2), var(--bg1));
-      font-family: system-ui, sans-serif;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      font-family: 'Segoe UI', system-ui, sans-serif;
       overflow: hidden;
       padding: 16px;
+      color: var(--text);
     }
 
     /* FULL-SCREEN CONFETTI CANVAS */
@@ -42,24 +44,29 @@
 
     .card {
       width: min(720px, 92vw);
-      padding: 26px 22px;
+      padding: 40px 32px;
       background: var(--card);
-      backdrop-filter: blur(10px);
-      border-radius: 22px;
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
       text-align: center;
-      box-shadow: 0 18px 60px rgba(0,0,0,.15);
+      box-shadow: 0 20px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(233,69,96,.2);
+      border: 2px solid rgba(233,69,96,.15);
+      
     }
 
     .art {
-      width: min(260px, 80vw);
-      margin: 0 auto 10px;
+      width: min(280px, 80vw);
+      margin: 0 auto 20px;
       display: block;
-      filter: drop-shadow(0 10px 14px rgba(0,0,0,.12));
+      filter: drop-shadow(0 10px 30px rgba(233,69,96,.4));
     }
 
     h1 {
-      font-size: clamp(26px, 4vw, 44px);
-      margin: 12px 0 18px;
+      font-size: clamp(28px, 4.5vw, 48px);
+      margin: 12px 0 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
     }
 
     .button-zone {
@@ -74,56 +81,67 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      padding: 16px 24px;
-      font-size: 18px;
-      font-weight: 800;
-      border-radius: 999px;
+      padding: 18px 36px;
+      font-size: 19px;
+      font-weight: 700;
+      border-radius: 12px;
       border: none;
       cursor: pointer;
-      box-shadow: 0 10px 24px rgba(0,0,0,.14);
+      box-shadow: 0 8px 24px rgba(0,0,0,.4);
       user-select: none;
       -webkit-tap-highlight-color: transparent;
-      transition: transform .12s ease, background .12s ease;
+      transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     #yesBtn {
       left: 18%;
-      background: var(--yes);
+      background: var(--accent);
       color: #fff;
     }
-    #yesBtn:hover { background: var(--yesHover); }
-
+    #yesBtn:hover { 
+      background: var(--accentHover);
+      box-shadow: 0 12px 32px rgba(233,69,96,.5);
+    }
     #noBtn {
       left: 62%;
-      background: #e5e7eb;
-      color: #111827;
+      background: #2a2a3e;
+      color: #b0b0b0;
+      border: 1px solid #3a3a4e;
     }
 
     .hint {
-      margin-top: 10px;
-      font-size: 13px;
-      opacity: .7;
+      margin-top: 16px;
+      font-size: 14px;
+      opacity: .6;
+      font-weight: 500;
+      letter-spacing: 0.3px;
     }
 
     .result {
       display: none;
-      margin-top: 18px;
-      animation: pop .35s ease;
+      margin-top: 24px;
+      animation: pop .4s ease;
     }
 
     .result h2 {
-      font-size: clamp(30px, 4.5vw, 46px);
+      font-size: clamp(32px, 5vw, 52px);
       margin: 10px 0;
+      font-weight: 800;
+      color: var(--accent);
+      text-shadow: 0 4px 20px rgba(233,69,96,.5);
     }
 
     .fireworks {
       width: min(380px, 90vw);
       margin: 0 auto;
       display: block;
+      border-radius: 12px;
     }
 
     @keyframes pop {
-      from { transform: scale(.96); opacity: 0; }
+      from { transform: scale(.94); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
   </style>
@@ -133,56 +151,51 @@
   <canvas id="confettiCanvas"></canvas>
 
   <main class="card">
-    <!-- ANIMAL WITH HEART -->
+    <!-- BOLD HEART ICON -->
     <svg class="art" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="fur" x1="0" x2="1">
-          <stop offset="0" stop-color="#f7c7a1"/>
-          <stop offset="1" stop-color="#f2a97b"/>
+        <linearGradient id="heartGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#e94560"/>
+          <stop offset="1" stop-color="#d63651"/>
         </linearGradient>
-        <linearGradient id="heart" x1="0" x2="1">
-          <stop offset="0" stop-color="#ff4d7d"/>
-          <stop offset="1" stop-color="#ff1f68"/>
-        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
       </defs>
-
-      <path d="M250 50 C250 33 270 25 282 38
-               C294 25 314 33 314 50
-               C314 78 282 92 282 106
-               C282 92 250 78 250 50Z"
-            fill="url(#heart)"/>
-
-      <path d="M90 120 C90 70 140 40 190 60
-               C240 40 290 70 290 120
-               C290 180 240 210 190 210
-               C140 210 90 180 90 120Z"
-            fill="url(#fur)"/>
-
-      <path d="M110 92 L95 55 L140 78 Z" fill="#f2a97b"/>
-      <path d="M270 92 L285 55 L240 78 Z" fill="#f2a97b"/>
-
-      <circle cx="160" cy="130" r="8"/>
-      <circle cx="220" cy="130" r="8"/>
-
-      <path d="M190 144 C186 144 182 148 182 152
-               C182 160 190 164 190 170
-               C190 164 198 160 198 152
-               C198 148 194 144 190 144Z"
-            fill="#ff7aa2"/>
+      
+      <!-- Bold geometric heart -->
+      <path d="M160 220 L60 120 C40 100 40 70 60 50 C80 30 110 30 130 50 L160 80 L190 50 C210 30 240 30 260 50 C280 70 280 100 260 120 Z" 
+            fill="url(#heartGrad)" 
+            filter="url(#glow)"
+            stroke="#fff" 
+            stroke-width="3"
+            stroke-linejoin="round"/>
+      
+      <!-- Inner highlight -->
+      <path d="M160 200 L80 120 C65 105 65 82 80 67 C95 52 118 52 133 67 L160 94" 
+            fill="none" 
+            stroke="rgba(255,255,255,0.3)" 
+            stroke-width="4"
+            stroke-linecap="round"/>
+      
     </svg>
 
     <h1>Kenny will you be my valentine?</h1>
 
     <section class="button-zone" id="zone">
-      <button id="yesBtn">Yes</button>
-      <button id="noBtn">No</button>
+      <button id="yesBtn">Hell Yes</button>
+      <button id="noBtn">Nah</button>
     </section>
 
     <!-- HINT -->
-    <div class="hint" id="hint">“No” seems a bit shy 😈</div>
+    <div class="hint" id="hint">Try clicking "Nah" if you dare 😏</div>
 
     <section class="result" id="result">
-      <h2>YAY! 🎉</h2>
+      <h2>HELL YEAH! 🔥</h2>
       <img
         class="fireworks"
         src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
@@ -227,6 +240,7 @@
           spread: 90,
           startVelocity: 45,
           ticks: 180,
+          colors: ['#e94560', '#d63651', '#1a1a2e', '#eaeaea'],
           origin: { x: Math.random(), y: Math.random() * 0.3 }
         });
         if (Date.now() < end) requestAnimationFrame(frame);
@@ -238,6 +252,7 @@
           spread: 140,
           startVelocity: 60,
           ticks: 220,
+          colors: ['#e94560', '#d63651', '#1a1a2e', '#eaeaea'],
           origin: { x: 0.5, y: 0.55 }
         });
       }, 300);
@@ -300,6 +315,7 @@
   </script>
 </body>
 </html>
+
 
 
 
